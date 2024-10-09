@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34525.116
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelAccounting.Loader", "ExcelAccounting.Loader.csproj", "{4035003B-07B4-4BED-9296-3DD4C2099EE8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4035003B-07B4-4BED-9296-3DD4C2099EE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4035003B-07B4-4BED-9296-3DD4C2099EE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4035003B-07B4-4BED-9296-3DD4C2099EE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4035003B-07B4-4BED-9296-3DD4C2099EE8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {248A383A-A5DC-428A-AB0A-A83FE2BD2813}
+	EndGlobalSection
+EndGlobal

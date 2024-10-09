@@ -1,0 +1,8 @@
+﻿################################################################################
+# Данный GITIGNORE-файл был автоматически создан Microsoft(R) Visual Studio.
+################################################################################
+
+/ExcelAccounting.Loader/.vs/ExcelAccounting.Loader
+/ExcelAccounting.Loader/obj
+/ExcelAccounting.Loader/bin/Debug/net8.0
+/Data
