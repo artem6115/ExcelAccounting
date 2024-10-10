@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ExcelAccounting.Loader
 {
@@ -6,6 +7,8 @@ namespace ExcelAccounting.Loader
     {
         public string LoadFileAndConfig()
         {
+            if(!Directory.Exists("Data"))
+                Directory.CreateDirectory("Data");
             foreach (var item in GetFiles())
             {
                 if (!File.Exists(item.Item1))
@@ -20,22 +23,19 @@ namespace ExcelAccounting.Loader
             }
             string? api = File.ReadAllText(Path.Combine("Data", "Apikey.txt"));
             if (string.IsNullOrWhiteSpace(api))
+            {
+                Console.WriteLine("Передайте в файл Data / Apikey.txt ключ от телеграм бота");
+                Console.ReadLine();
                 throw new ArgumentException("Передайте в файл Data/Apikey.txt ключ от телеграм бота");
+            }
             return api;
 
         }
         private IEnumerable<(string, string)> GetFiles()
         {
-            yield return (Path.Combine("Data", "Data.txt"), "Счёт;Категория;Подкатегория;Дата;Описание;Сумма");
-            yield return (Path.Combine("Data", "Stash.txt"), "На что копить;Отложеная сумма");
+            yield return (Path.Combine("Data", "Data.txt"), "Счёт;Категория;Подкатегория;Описание;Дата;Сумма");
+            yield return (Path.Combine("Data", "Stash.txt"), "На что копить;Отложеная сумма;Процентная ставка");
             yield return (Path.Combine("Data", "Apikey.txt"), "");
-        }
-        public void LoadData()
-        {
-            foreach (var note in File.ReadAllLines(DataWorker._transactionPath))
-            {
-
-            }
         }
 
     }

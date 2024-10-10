@@ -1,4 +1,6 @@
-﻿namespace ExcelAccounting.Loader.Commands
+﻿using Telegram.Bot;
+
+namespace ExcelAccounting.Loader.Commands
 {
     public class TransactionCommand : ICommand
     {
@@ -12,7 +14,7 @@
                 throw new ArgumentException(ICommand.ErrorParseMessage);
 
             _model.Account = args[0].Trim();
-            _model.Ralue = double.Parse(args.Last().Trim());
+            _model.Value = double.Parse(args.Last().Trim());
             _model.Date = DateTime.Now;
             if (args.Count > 2)
             {
@@ -25,11 +27,10 @@
             }
 
         }
-        public void Execute(Messanger messanger)
+        public void Execute(ITelegramBotClient bot, long chatId)
         {
-            messanger.Send("");
             DataWorker.TransactionModels.Add(_model);
-            DataWorker.TransactionWrite();
+            DataWorker.TransactionSave();
         }
     }
     public class TransactionModel
@@ -38,11 +39,11 @@
         public string? Decription { get; set; }
         public string? Type { get; set; }
         public string? Subtype { get; set; }
-        public double Ralue { get; set; }
+        public double Value { get; set; }
         public DateTime Date { get; set; }
         public override string ToString()
         {
-            return $"{Account};{Type};{Subtype};{Decription};{Date};{Ralue}\n";
+            return $"{Account};{Type};{Subtype};{Decription};{Date};{Value}\n";
         }
     }
 }

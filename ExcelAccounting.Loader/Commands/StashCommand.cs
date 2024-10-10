@@ -1,4 +1,6 @@
-﻿namespace ExcelAccounting.Loader.Commands
+﻿using Telegram.Bot;
+
+namespace ExcelAccounting.Loader.Commands
 {
     public class StashCommand : ICommand
     {
@@ -17,24 +19,12 @@
             if (countArgs == 3)
                 _model.Rate = double.Parse(args[1].Trim());
         }
-        public void Execute(Messanger messanger)
+        public void Execute(ITelegramBotClient bot, long chatId)
         {
-            LoadNote();
 
         }
 
-        public void LoadNote()
-        {
-            foreach (var line in File.ReadLines(DataWorker._stashPath))
-            {
-                if (string.Equals
-                    (_model.Name, line.Split(';')[0]
-                    , StringComparison.CurrentCultureIgnoreCase))
-                {
 
-                }
-            }
-        }
     }
     public class StashModel
     {
