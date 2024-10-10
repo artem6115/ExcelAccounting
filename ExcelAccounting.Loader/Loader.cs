@@ -4,7 +4,7 @@ namespace ExcelAccounting.Loader
 {
     public class Loader
     {
-        public string Load()
+        public string LoadFileAndConfig()
         {
             foreach (var item in GetFiles())
             {
@@ -30,5 +30,13 @@ namespace ExcelAccounting.Loader
             yield return (Path.Combine("Data", "Stash.txt"), "На что копить;Отложеная сумма");
             yield return (Path.Combine("Data", "Apikey.txt"), "");
         }
+        public void LoadData()
+        {
+            foreach (var note in File.ReadAllLines(DataWorker._transactionPath))
+            {
+
+            }
+        }
+
     }
 }

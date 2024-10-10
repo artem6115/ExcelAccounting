@@ -28,7 +28,8 @@
         public void Execute(Messanger messanger)
         {
             messanger.Send("");
-            File.AppendAllText(DataPath._dataPath, _model.ToString());
+            DataWorker.TransactionModels.Add(_model);
+            DataWorker.TransactionWrite();
         }
     }
     public class TransactionModel
