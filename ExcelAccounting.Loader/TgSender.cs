@@ -14,6 +14,7 @@ namespace ExcelAccounting.Loader
             try
             {
                 await bot.SendTextMessageAsync(chatId, message, replyMarkup: TgBot.ButtonsMenu());
+                Console.WriteLine(message);
             }
             catch (Exception e) { Console.WriteLine(e.Message); }
         }

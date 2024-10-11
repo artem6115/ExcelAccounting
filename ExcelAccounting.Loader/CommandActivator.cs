@@ -12,10 +12,15 @@ namespace ExcelAccounting.Loader
         public static ICommand CreateCommand(string message)
         {
             ICommand command = new MessageCommand("");
-            var commandStr = message.Split(";").First().Trim().ToLower();
-            if (commandStr.Contains("@"))
-                message = message.Replace($"{commandStr};", "").Trim();
+            var parametrsCommand = message.Split(";");
+            var commandStr = parametrsCommand.First().ToLower();
+            if (commandStr.Contains("/"))
+            {
+                if (parametrsCommand.Length == 1) message = "";
+                else message = message.Replace($"{commandStr};", "", StringComparison.CurrentCultureIgnoreCase).Trim();
+            }
             var parametrs = message.Split(';').ToList();
+            commandStr = commandStr.Trim();
             try
             {
                 switch (commandStr)
@@ -34,10 +39,10 @@ namespace ExcelAccounting.Loader
 
                         break;
                     case "/rate":
-
+                        command = new RateCommand(parametrs);
                         break;
                     case "/report":
-
+                        command = new ReportCommand(parametrs);
                         break;
                     case "/stash":
                         command = new StashCommand(parametrs);
@@ -49,7 +54,6 @@ namespace ExcelAccounting.Loader
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
                 command = new MessageCommand(e.Message);
             }
             return command;

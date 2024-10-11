@@ -1,4 +1,5 @@
 ﻿using ExcelAccounting.Loader.Commands;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ExcelAccounting.Loader
 {
@@ -6,19 +7,14 @@ namespace ExcelAccounting.Loader
     {
         static public readonly string _transactionPath = Path.Combine("Data", "Data.txt");
         static public readonly string _stashPath = Path.Combine("Data", "Stash.txt");
-        public static List<StashModel> StashModels { get; set; } = new();
-        public static List<TransactionModel> TransactionModels { get; set; } = new();
+        public static List<TransactionModel> TransactionModels { get; } = new();
+        public static List<StashModel> StashModels { get; } = new();
 
-
-        public static void StashSave()
+        public static void LoadData()
         {
-            var newStrData = StashModels.Select(x => x.ToString());
-            File.WriteAllLines(_stashPath, newStrData);
-        }
-        public static List<TransactionModel> LoadData()
-        {
-            foreach(var note in File.ReadAllLines(_transactionPath).Skip(1))
+            foreach (var note in File.ReadAllLines(_transactionPath).Skip(1))
             {
+                if (string.IsNullOrWhiteSpace(note)) continue;
                 var parametrs = note.Split(';');
                 var entity = new TransactionModel()
                 {
@@ -26,33 +22,35 @@ namespace ExcelAccounting.Loader
                     Type = parametrs[1],
                     Subtype = parametrs[2],
                     Decription = parametrs[3],
-                    Date = DateOnly.Parse(parametrs[4]), 
+                    Date = DateOnly.Parse(parametrs[4]),
                     Value = double.Parse(parametrs[5])
                 };
                 TransactionModels.Add(entity);
             }
-            return TransactionModels;
-        }
-        public static List<StashModel> LoadStash()
-        {
-            foreach (var note in File.ReadAllLines(_stashPath))
+            foreach (var note in File.ReadAllLines(_stashPath).Skip(1))
             {
+                if (string.IsNullOrWhiteSpace(note)) continue;
                 var parametrs = note.Split(';');
                 var entity = new StashModel()
                 {
                     Name = parametrs[0],
                     Value = double.Parse(parametrs[1]),
-                    Rate = double.Parse(parametrs[2])
                 };
+                if (!string.IsNullOrWhiteSpace(parametrs[2]))
+                    entity.Rate = double.Parse(parametrs[2]);
                 StashModels.Add(entity);
             }
-            return StashModels;
         }
-
         public static void AddTransaction(TransactionModel model)
         {
             File.AppendAllText(_transactionPath, model.ToString());
             TransactionModels.Add(model);
+        }
+
+        public static void SaveStashs()
+        {
+            File.WriteAllText(_stashPath,TgBot._headerStashFileText);
+            File.AppendAllLines(_stashPath,StashModels.Select(x=>x.ToString()));
         }
     }
 }
