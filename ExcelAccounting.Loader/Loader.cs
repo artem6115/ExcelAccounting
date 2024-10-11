@@ -33,7 +33,7 @@ namespace ExcelAccounting.Loader
         }
         private IEnumerable<(string, string)> GetFiles()
         {
-            yield return (Path.Combine("Data", "Data.txt"), "Счёт;Категория;Подкатегория;Описание;Дата;Сумма\n");
+            yield return (Path.Combine("Data", "Data.txt"), TgBot._headerDataFileText);
             yield return (Path.Combine("Data", "Stash.txt"), TgBot._headerStashFileText);
             yield return (Path.Combine("Data", "Apikey.txt"), "");
         }
