@@ -47,12 +47,8 @@ namespace ExcelAccounting.Loader
                         break;
                 }
             }
-            catch (ArgumentException e)
+            catch (Exception e)
             {
-                Console.WriteLine(e.Message);
-                command = new MessageCommand(e.Message);
-            }
-            catch (Exception e) {
                 Console.WriteLine(e.Message);
                 command = new MessageCommand(e.Message);
             }

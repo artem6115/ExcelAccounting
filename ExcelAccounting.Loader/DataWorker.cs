@@ -15,14 +15,9 @@ namespace ExcelAccounting.Loader
             var newStrData = StashModels.Select(x => x.ToString());
             File.WriteAllLines(_stashPath, newStrData);
         }
-        public static void TransactionSave()
+        public static List<TransactionModel> LoadData()
         {
-            var newStrData = TransactionModels.Select(x => x.ToString());
-            File.WriteAllLines(_transactionPath, newStrData);
-        }
-        public static List<TransactionModel> LoadTransaction()
-        {
-            foreach(var note in File.ReadAllLines(_transactionPath))
+            foreach(var note in File.ReadAllLines(_transactionPath).Skip(1))
             {
                 var parametrs = note.Split(';');
                 var entity = new TransactionModel()
@@ -31,7 +26,7 @@ namespace ExcelAccounting.Loader
                     Type = parametrs[1],
                     Subtype = parametrs[2],
                     Decription = parametrs[3],
-                    Date = DateTime.Parse(parametrs[4]), 
+                    Date = DateOnly.Parse(parametrs[4]), 
                     Value = double.Parse(parametrs[5])
                 };
                 TransactionModels.Add(entity);
@@ -52,6 +47,12 @@ namespace ExcelAccounting.Loader
                 StashModels.Add(entity);
             }
             return StashModels;
+        }
+
+        public static void AddTransaction(TransactionModel model)
+        {
+            File.AppendAllText(_transactionPath, model.ToString());
+            TransactionModels.Add(model);
         }
     }
 }

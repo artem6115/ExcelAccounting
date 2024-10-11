@@ -9,16 +9,13 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ExcelAccounting.Loader.Commands
 {
-    public class MessageCommand : ICommand
+    public class MessageCommand : TgSender ,ICommand
     {
         string _message;
         public MessageCommand(string message) => _message = message;
-        public void Execute(ITelegramBotClient bot, long chatId)
+        public async void Execute(ITelegramBotClient bot, long chatId)
         {
-            try
-            {
-                bot.SendTextMessageAsync(chatId, _message, replyMarkup: TgBot.ButtonsMenu());
-            }catch (Exception e) { Console.WriteLine(e.Message); }
+           await SendMessageAsync(bot, chatId,_message);
         }
     }
 }

@@ -1,8 +1,9 @@
 ﻿using Telegram.Bot;
+using Telegram.Bot.Types.Payments;
 
 namespace ExcelAccounting.Loader.Commands
 {
-    public class TransactionCommand : ICommand
+    public class TransactionCommand : TgSender, ICommand
     {
         private readonly TransactionModel _model;
         public TransactionCommand(TransactionModel model) => _model = model;
@@ -10,27 +11,30 @@ namespace ExcelAccounting.Loader.Commands
         {
             _model = new();
             int countArgs = args.Count;
-            if (countArgs < 2 || countArgs == 4 || countArgs > 5)
-                throw new ArgumentException(ICommand.ErrorParseMessage);
+            if (countArgs < 2 || countArgs > 5)
+                throw new ArgumentException(ICommand.ErrorParseCommand);
 
             _model.Account = args[0].Trim();
-            _model.Value = double.Parse(args.Last().Trim());
-            _model.Date = DateTime.Now;
+            if (!double.TryParse(args.Last().Trim(), out var value))
+                throw new FormatException(ICommand.ErrorParseValue);
+            _model.Value = value;
+            _model.Date = DateOnly.FromDateTime(DateTime.Now);
             if (args.Count > 2)
             {
                 _model.Type = args[1].Trim();
-                if (args.Count == 5)
+                if (args.Count > 3)
                 {
                     _model.Subtype = args[2].Trim();
-                    _model.Decription = args[3].Trim();
+                    if(args.Count > 4)
+                        _model.Decription = args[3].Trim();
                 }
             }
 
         }
-        public void Execute(ITelegramBotClient bot, long chatId)
+        public async void Execute(ITelegramBotClient bot, long chatId)
         {
-            DataWorker.TransactionModels.Add(_model);
-            DataWorker.TransactionSave();
+            DataWorker.AddTransaction(_model);
+            await SendMessageAsync(bot, chatId,$"Операция на сумму {_model.Value} записана.");
         }
     }
     public class TransactionModel
@@ -40,7 +44,7 @@ namespace ExcelAccounting.Loader.Commands
         public string? Type { get; set; }
         public string? Subtype { get; set; }
         public double Value { get; set; }
-        public DateTime Date { get; set; }
+        public DateOnly Date { get; set; }
         public override string ToString()
         {
             return $"{Account};{Type};{Subtype};{Decription};{Date};{Value}\n";

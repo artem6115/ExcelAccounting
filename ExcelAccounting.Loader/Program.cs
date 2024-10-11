@@ -9,6 +9,7 @@ public class Program
     {
         var loader = new Loader();
         var apikey = loader.LoadFileAndConfig();
+        DataWorker.LoadData();
         var bot = new TelegramBotClient(apikey);
         var cts = new CancellationTokenSource();
         var cancellationToken = cts.Token;
